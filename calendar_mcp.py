@@ -36,8 +36,25 @@ def get_month_range():
     return start.isoformat() + 'Z', end.isoformat() + 'Z'
 
 
-# @mcp.tool()
-# async def create_new_event() -> str: 
+
+@mcp.tool()
+async def create_calendar_event(summary: str, description: str, start_time: str, end_time: str, location: str = "", livestream_url: str = "") -> str:
+    """Create a Google Calendar event with the given details."""
+    try:
+        service = get_calendar_service()
+        event = {
+            'summary': summary,
+            'location': location,
+            'description': description + (f"\nLivestream: {livestream_url}" if livestream_url else ""),
+            'start': {'dateTime': start_time, 'timeZone': 'UTC'},
+            'end': {'dateTime': end_time, 'timeZone': 'UTC'},
+        }
+        created_event = service.events().insert(calendarId='rustyjimmies@gmail.com', body=event).execute()
+        return f"Event created: {created_event.get('htmlLink')}"
+    except Exception as e:
+        return f"Error creating event: {e}"
+
+
 
 @mcp.tool()
 async def summarize_upcoming_events() -> str: 
