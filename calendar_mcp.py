@@ -3,6 +3,7 @@ from typing import Any
 from mcp.server.fastmcp import FastMCP
 import datetime
 import random
+from calendar_event import CalendarEvent
 
 
 # Google Calendar API imports
@@ -38,21 +39,22 @@ def get_month_range():
 
 
 @mcp.tool()
-async def create_calendar_event(summary: str, description: str, start_time: str, end_time: str, location: str = "", livestream_url: str = "") -> str:
+async def create_calendar_event(calendarEvent: CalendarEvent) -> str:
     """Create a Google Calendar event with the given details."""
     try:
         service = get_calendar_service()
         event = {
-            'summary': summary,
-            'location': location,
-            'description': description + (f"\nLivestream: {livestream_url}" if livestream_url else ""),
-            'start': {'dateTime': start_time, 'timeZone': 'UTC'},
-            'end': {'dateTime': end_time, 'timeZone': 'UTC'},
+            'summary': calendarEvent.summary,
+            'location': calendarEvent.location,
+            'description': calendarEvent.description + (f"\nLivestream: {calendarEvent.livestream_url}" if calendarEvent.livestream_url else ""),
+            'start': {'dateTime': calendarEvent.start_time, 'timeZone': 'UTC'},
+            'end': {'dateTime': calendarEvent.end_time, 'timeZone': 'UTC'},
         }
         created_event = service.events().insert(calendarId='rustyjimmies@gmail.com', body=event).execute()
         return f"Event created: {created_event.get('htmlLink')}"
     except Exception as e:
         return f"Error creating event: {e}"
+
 
 @mcp.tool()
 async def summarize_upcoming_events() -> str: 
