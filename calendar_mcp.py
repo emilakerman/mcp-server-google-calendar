@@ -54,8 +54,6 @@ async def create_calendar_event(summary: str, description: str, start_time: str,
     except Exception as e:
         return f"Error creating event: {e}"
 
-
-
 @mcp.tool()
 async def summarize_upcoming_events() -> str: 
     """Summarize upcoming Google Calendar events for this month."""
