@@ -1,10 +1,13 @@
 
 from typing import Any
-from mcp.server.fastmcp import FastMCP
 import datetime
 import random
-from calendar_event import CalendarEvent
 
+# MCP Specific Import
+from mcp.server.fastmcp import FastMCP
+
+# Calendar Event Custom Model
+from calendar_event import CalendarEvent
 
 # Google Calendar API imports
 from google.oauth2.service_account import Credentials
